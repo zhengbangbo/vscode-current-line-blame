@@ -1,11 +1,20 @@
 {
   "name": "current-line-blame",
   "displayName": "Current Line Blame",
-  "icon": "assets/logo.png",
+  "icon": "assets/icon.png",
   "description": "Lightweight Git blame for the current line. Nothing else.",
   "version": "0.1.0",
   "publisher": "zhengbangbo",
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/zhengbangbo/vscode-current-line-blame.git"
+  },
+  "homepage": "https://github.com/zhengbangbo/vscode-current-line-blame#readme",
+  "bugs": {
+    "url": "https://github.com/zhengbangbo/vscode-current-line-blame/issues"
+  },
+  "keywords": ["git", "blame", "inline blame", "current line", "annotations"],
   "engines": {
     "vscode": "^1.85.0"
   },
@@ -23,7 +32,7 @@
     "test": "node --test test/*.test.js",
     "test:integration": "node scripts/test-integration.js",
     "check": "tsc -p .",
-    "package": "vsce package --allow-missing-repository"
+    "package": "vsce package"
   },
   "contributes": {
     "commands": [

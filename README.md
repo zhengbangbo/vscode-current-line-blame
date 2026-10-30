@@ -16,6 +16,10 @@ const answer = 42;    Alice, 2 days ago • Fix the answer
 
 Requires VS Code 1.85 or later and Git available as `git` on your PATH. When using Remote SSH, WSL, or Dev Containers, install Git in the environment where the extension runs.
 
+In VS Code, open **Extensions**, search for **Current Line Blame** by **zhengbangbo**, and select **Install**. Then open a tracked file in a Git repository and place the cursor on a line.
+
+To build and install a VSIX locally:
+
 1. Run `npm install` in this project directory.
 2. Run `npm run package` to generate `current-line-blame-0.1.0.vsix`.
 3. Run **Extensions: Install from VSIX...** from the VS Code Command Palette and select the generated file.
