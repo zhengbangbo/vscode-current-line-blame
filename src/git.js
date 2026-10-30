@@ -48,7 +48,7 @@ function parseBlame(output) {
 async function blameLine(filename, contents, line, signal) {
   filename = await realpath(filename);
   const cwd = path.dirname(filename);
-  const root = (await runGit(['rev-parse', '--show-toplevel'], cwd, undefined, signal)).trimEnd();
+  const root = (await runGit(['rev-parse', '--show-toplevel'], cwd, undefined, signal)).replace(/\r?\n$/, '');
   const relative = path.relative(root, filename).split(path.sep).join('/');
   const output = await runGit(['blame', '--line-porcelain', '--contents', '-', '-L', `${line},${line}`, '--', relative], root, contents, signal);
   return parseBlame(output);

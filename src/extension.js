@@ -61,8 +61,12 @@ function activate(context) {
     vscode.workspace.onDidGrantWorkspaceTrust(schedule),
     vscode.window.onDidChangeWindowState(event => { if (event.focused) schedule(); }),
     vscode.commands.registerCommand('currentLineBlame.toggle', async () => {
-      const config = vscode.workspace.getConfiguration('currentLineBlame');
-      await config.update('enabled', !config.get('enabled', true), vscode.ConfigurationTarget.Global);
+      const config = vscode.workspace.getConfiguration('currentLineBlame', vscode.window.activeTextEditor?.document.uri);
+      const setting = config.inspect('enabled');
+      const target = setting?.workspaceFolderValue !== undefined ? vscode.ConfigurationTarget.WorkspaceFolder
+        : setting?.workspaceValue !== undefined ? vscode.ConfigurationTarget.Workspace
+          : vscode.ConfigurationTarget.Global;
+      await config.update('enabled', !config.get('enabled', true), target);
     }),
     { dispose() { clearTimeout(timer); request?.abort(); } }
   );

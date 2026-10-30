@@ -1,42 +1,52 @@
 # Current Line Blame
 
-只做一件事：在 VS Code 当前行的末尾，显示这行代码最后一次提交的作者、时间和摘要。类似 GitLens 的 Current Line Blame 和 Zed 原生的行尾 blame。
+A lightweight VS Code extension that does one thing: shows the author, relative time, and commit summary for the current line. Inspired by GitLens's Current Line Blame and Zed's built-in inline blame.
 
 ```text
 const answer = 42;    Alice, 2 days ago • Fix the answer
 ```
 
-- 光标移动后自动更新，默认延迟 200ms。
-- 悬停查看提交摘要、作者、完整日期及短 commit hash。
-- 未提交的行显示 `Uncommitted changes`。未保存的插入、删除也会正确参与行号计算。
-- 非 Git 文件、未跟踪文件、多光标和选中文本时不显示。
-- 跟随编辑器主题，无运行时依赖，不访问网络。
+- Updates automatically as you move the cursor, with a default delay of 200 ms.
+- Hover to see the commit summary, author, full date, and short commit hash.
+- Shows `Uncommitted changes` for lines that have not been committed. Unsaved insertions and deletions are included when mapping lines to commits.
+- Hides annotations for files outside Git, untracked files, multiple cursors, and text selections.
+- Follows your editor theme, has no runtime dependencies, and makes no network requests.
 
-## 安装与使用
+## Installation and usage
 
-需要本机安装 Git，并能在 PATH 中找到 `git`。支持 VS Code 1.85 及以上版本；Remote SSH / WSL / Dev Containers 场景需要在扩展运行环境中安装 Git。
+Requires VS Code 1.85 or later and Git available as `git` on your PATH. When using Remote SSH, WSL, or Dev Containers, install Git in the environment where the extension runs.
 
-1. 执行 `npm install`。
-2. 执行 `npm run package`，生成 `current-line-blame-0.1.0.vsix`。
-3. 在 VS Code 命令面板运行 **Extensions: Install from VSIX...**，选择生成的文件。
-4. 打开 Git 仓库中的已跟踪文件，将光标停在任意一行。
+1. Run `npm install` in this project directory.
+2. Run `npm run package` to generate `current-line-blame-0.1.0.vsix`.
+3. Run **Extensions: Install from VSIX...** from the VS Code Command Palette and select the generated file.
+4. Open a tracked file in a Git repository and place the cursor on a line.
 
-也可以在本项目按 F5 启动 Extension Development Host 调试。
+To debug the extension, open this project in VS Code and press F5 to launch an Extension Development Host.
 
-## 设置
+## Settings
 
-| 设置 | 默认值 | 用途 |
+| Setting | Default | Description |
 | --- | --- | --- |
-| `currentLineBlame.enabled` | `true` | 开关行尾注释 |
-| `currentLineBlame.delay` | `200` | 更新延迟，单位毫秒 |
-| `currentLineBlame.maxFileSize` | `1048576` | 最大文档大小，单位 UTF-8 字节 |
+| `currentLineBlame.enabled` | `true` | Show or hide inline blame annotations. |
+| `currentLineBlame.delay` | `200` | Update delay in milliseconds. |
+| `currentLineBlame.maxFileSize` | `1048576` | Maximum document size in UTF-8 bytes. |
 
-命令面板提供 **Current Line Blame: Toggle**。外部提交或分支切换后，移动光标、切回窗口或等待最多 30 秒会刷新。
+Use **Current Line Blame: Toggle** from the Command Palette to turn annotations on or off. The command updates an existing folder or workspace setting when present; otherwise, it updates the global setting. After an external commit or branch switch, move the cursor, refocus the window, or wait up to 30 seconds to refresh the annotation.
 
-扩展仅在受信任工作区运行 Git。Git 不存在、文件尚未提交或命令失败时会安静隐藏注释。每次只查询当前行，命令最多运行 5 秒；快速移动光标会取消旧查询。
+The extension runs Git only in trusted workspaces. Annotations are quietly hidden when Git is unavailable, a file has no committed history, or a command fails. Each request queries only the current line, with a five-second timeout per Git command. Moving the cursor cancels any previous request.
 
-## 开发
+## Development
 
-`npm run check` 做静态类型检查，`npm test` 在临时 Git 仓库中验证真实 blame、未保存修改、特殊文件名和取消请求。
+Run `npm run check` for static type checking. Run `npm test` to test against real temporary Git repositories, covering blame attribution, unsaved insertions and deletions, CRLF line endings, staged changes, multiple authors, special filenames, trailing spaces in directory names, worktrees, and request cancellation.
 
-行尾显示使用 VS Code 官方 [Decoration API](https://code.visualstudio.com/api/references/vscode-api#DecorationRenderOptions)。
+Run `npm run test:integration` to run extension host tests using the official `@vscode/test-electron` package, with an isolated VS Code profile and a temporary repository. The first run downloads VS Code and requires an internet connection. Tests cover extension activation, inline annotations and hover content, unsaved changes, rapid cursor movement, selections, multiple cursors, split editor switching, untracked files, file size limits, and toggling global and workspace settings. Editor API calls are observed and forwarded to the real editor; Git and editor behavior are not mocked.
+
+You can also use an installed compatible editor, such as VSCodium on macOS:
+
+```sh
+VSCODE_EXECUTABLE_PATH=/Applications/VSCodium.app/Contents/MacOS/VSCodium npm run test:integration
+```
+
+Tests use a temporary user profile and do not modify your regular editor settings.
+
+Inline annotations use VS Code's [Decoration API](https://code.visualstudio.com/api/references/vscode-api#DecorationRenderOptions).

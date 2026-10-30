@@ -4,3 +4,6 @@ test/**
 tsconfig.json
 package-lock.json
 **/*.vsix
+scripts/**
+integration/**
+.vscode-test/**
