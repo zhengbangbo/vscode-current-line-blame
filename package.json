@@ -1,0 +1,35 @@
+{
+  "name": "current-line-blame",
+  "displayName": "Current Line Blame",
+  "description": "Lightweight Git blame for the current line. Nothing else.",
+  "version": "0.1.0",
+  "publisher": "zhengbangbo",
+  "license": "MIT",
+  "engines": { "vscode": "^1.85.0" },
+  "categories": ["Other"],
+  "activationEvents": ["onStartupFinished"],
+  "main": "./src/extension.js",
+  "extensionKind": ["workspace"],
+  "scripts": {
+    "test": "node --test",
+    "check": "tsc -p .",
+    "package": "vsce package --allow-missing-repository"
+  },
+  "contributes": {
+    "commands": [{ "command": "currentLineBlame.toggle", "title": "Current Line Blame: Toggle" }],
+    "configuration": {
+      "title": "Current Line Blame",
+      "properties": {
+        "currentLineBlame.enabled": { "type": "boolean", "default": true, "description": "Show Git blame at the end of the current line." },
+        "currentLineBlame.delay": { "type": "number", "default": 200, "minimum": 0, "maximum": 2000, "description": "Delay before updating blame, in milliseconds." },
+        "currentLineBlame.maxFileSize": { "type": "number", "default": 1048576, "minimum": 1024, "description": "Maximum document size in UTF-8 bytes." }
+      }
+    }
+  },
+  "devDependencies": {
+    "@types/node": "^20.0.0",
+    "@types/vscode": "^1.85.0",
+    "@vscode/vsce": "^3.0.0",
+    "typescript": "^5.0.0"
+  }
+}

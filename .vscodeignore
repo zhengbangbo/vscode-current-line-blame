@@ -1,0 +1,6 @@
+node_modules/**
+test/**
+.vscode/**
+tsconfig.json
+package-lock.json
+**/*.vsix
