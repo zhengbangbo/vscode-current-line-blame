@@ -1,6 +1,7 @@
 {
   "name": "current-line-blame",
   "displayName": "Current Line Blame",
+  "icon": "assets/logo.png",
   "description": "Lightweight Git blame for the current line. Nothing else.",
   "version": "0.1.0",
   "publisher": "zhengbangbo",
